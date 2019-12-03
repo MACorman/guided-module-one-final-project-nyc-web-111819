@@ -1,7 +1,7 @@
-require 'rest-client'
+#require 'rest-client'
 require 'json'
-require 'HTTParty'
-require 'Nokogiri'
+#require 'HTTParty'
+#require 'Nokogiri'
 
 
 
