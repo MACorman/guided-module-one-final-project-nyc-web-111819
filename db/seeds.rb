@@ -1,3 +1,6 @@
+Food.destroy_all
+User.destroy_all
+
 Food.create(name: "apple", serving_size: "1 medium", calories: 95, total_fat: "0.3g", cholesterol: "0mg", sodium: "1.8mg", total_carbohydrate: "25g", sugar: "19g", protein: "0.5g")
 Food.create(name: "blackberries", serving_size: "1 cup", calories: 59, total_fat: "0.6g", cholesterol: "0mg", sodium: "1.5mg", total_carbohydrate: "13g", sugar: "6.7g", protein: "1.9g")
 Food.create(name: "blueberries", serving_size: "1/2 cup", calories: 41, total_fat: "0g", cholesterol: "0mg", sodium: "0.5mg", total_carbohydrate: "10.6g", sugar: "7.4g", protein: "0.5g")
