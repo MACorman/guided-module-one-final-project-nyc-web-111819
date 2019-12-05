@@ -102,6 +102,8 @@ Food.create(name: "cake", serving_size: "1 piece(67g)", calories: 262, total_fat
 Food.create(name: "tequila", serving_size: "1 shot(42g)", calories: 97, total_fat: "0g", cholesterol: "0mg", sodium: "0.4mg", total_carbohydrate: "0g", sugar: "0g", protein: "0g")
 Food.create(name: "whiskey", serving_size: "1 shot(42g)", calories: 97, total_fat: "0g", cholesterol: "0mg", sodium: "0.4mg", total_carbohydrate: "0g", sugar: "0g", protein: "0g")
 Food.create(name: "bread", serving_size: "1 slice(29g)", calories: 77, total_fat: "1g", cholesterol: "0mg", sodium: "142mg", total_carbohydrate: "14g", sugar: "1.6g", protein: "2.6g")
+Food.create(name: "jelly", serving_size: "1 tbsp", calories: 56, total_fat: "0g", cholesterol: "0mg", sodium: "6.3mg", total_carbohydrate: "15g", sugar: "11g", protein: "0g")
+
 
 
 User.create(username: "Maddy", password: "123abc")
