@@ -115,10 +115,10 @@ jgs   `dooooooooobodoooooooob'
                                                      
     MCKK
 
-    ans = @prompt.select("Please choose one of the following options.", ["Instantiate new search", "Random search", "View saved searches", "Log out", "Quit".colorize(:color => :red)])
+    ans = @prompt.select("Please choose one of the following options.", ["Instantiate new search", "Feelin' lucky??", "View saved searches", "Log out", "Quit".colorize(:color => :red)])
     if ans == "Instantiate new search"
         new_query
-    elsif ans == "Random search"
+    elsif ans == "Feelin' lucky??"
         random_search
     elsif ans == "View saved searches"
         @new_array = (@user_instance.foods.map {|data| data.name}).uniq
@@ -328,11 +328,14 @@ end
     
 def rand_search_save_new_main_menu
     #Options to save random search, initiate another random search, or return to main menu
-    ans = @prompt.select("Feelin' lucky???", ["Save search", "New random search", "Main menu"])
+    ans = @prompt.select("Please choose one of the following options.", ["Save search", "New random search", "Main menu"])
     if ans == "Save search"
         Query.create(food_id: @result.id, user_id: @user_instance.id)
         @user_instance.foods.reload
         yeet
+        puts "Saved search!".colorize(:color => :cyan)
+        return_to_main_menu_or_quit
+        #main_menu
     elsif ans == "New random search"
         random_search
     else
