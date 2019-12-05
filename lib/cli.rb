@@ -113,9 +113,11 @@ jgs   `dooooooooobodoooooooob'
                                                      
     MCKK
 
-    ans = @prompt.select("Please choose one of the following options.", ["Instantiate new search", "View saved searches", "Log out", "Quit".colorize(:color => :red)])
+    ans = @prompt.select("Please choose one of the following options.", ["Instantiate new search", "Random search", "View saved searches", "Log out", "Quit".colorize(:color => :red)])
     if ans == "Instantiate new search"
         new_query
+    elsif ans == "Random search"
+        random_search
     elsif ans == "View saved searches"
         @new_array = (@user_instance.foods.map {|data| data.name}).uniq
         yeet
@@ -160,16 +162,15 @@ end
 
 def print_new_food
     #Displays nutritional info for chosen food to terminal.
-    puts "| Name                   |    #{@food_deets.name.capitalize}".colorize(:color => :green)
-    puts "|________________________|________________________".colorize(:color => :green)
-    puts "| Serving Size           |    #{@food_deets.serving_size}".colorize(:color => :green)
-    puts "| Calories               |    #{@food_deets.calories}".colorize(:color => :green)
-    puts "| Total Fat              |    #{@food_deets.total_fat}".colorize(:color => :green)
-    puts "| Cholesterol            |    #{@food_deets.cholesterol}".colorize(:color => :green)
-    puts "| Sodium                 |    #{@food_deets.sodium}".colorize(:color => :green)
-    puts "| Total Carbohydrates    |    #{@food_deets.total_carbohydrate}".colorize(:color => :green)
-    puts "| Sugar                  |    #{@food_deets.sugar}".colorize(:color => :green)
-    puts "| Protein                |    #{@food_deets.protein}".colorize(:color => :green)
+    puts "  #{@food_deets.name.upcase}  ".colorize(:color => :green, :background => :light_yellow)
+    puts "  Serving Size           |    #{@food_deets.serving_size}".colorize(:color => :green)
+    puts "  Calories               |    #{@food_deets.calories}".colorize(:color => :green)
+    puts "  Total Fat              |    #{@food_deets.total_fat}".colorize(:color => :green)
+    puts "  Cholesterol            |    #{@food_deets.cholesterol}".colorize(:color => :green)
+    puts "  Sodium                 |    #{@food_deets.sodium}".colorize(:color => :green)
+    puts "  Total Carbohydrates    |    #{@food_deets.total_carbohydrate}".colorize(:color => :green)
+    puts "  Sugar                  |    #{@food_deets.sugar}".colorize(:color => :green)
+    puts "  Protein                |    #{@food_deets.protein}".colorize(:color => :green)
     save_new_search
 end
 
@@ -231,22 +232,21 @@ end
 
 def print_saved_food
     #Displays chosen saved search's nutritional info to terminal.
-    puts "| Name                   |   #{@chosen_food.name.capitalize}".colorize(:color => :green)
-    puts "|________________________|_________________________".colorize(:color => :green)
-    puts "| Serving Size           |   #{@chosen_food.serving_size}".colorize(:color => :green)
-    puts "| Calories               |   #{@chosen_food.calories}".colorize(:color => :green)
-    puts "| Total Fat              |   #{@chosen_food.total_fat}".colorize(:color => :green)
-    puts "| Cholesterol            |   #{@chosen_food.cholesterol}".colorize(:color => :green)
-    puts "| Sodium                 |   #{@chosen_food.sodium}".colorize(:color => :green)
-    puts "| Total Carbohydrates    |   #{@chosen_food.total_carbohydrate}".colorize(:color => :green)
-    puts "| Sugar                  |   #{@chosen_food.sugar}".colorize(:color => :green)
-    puts "| Protein                |   #{@chosen_food.protein}".colorize(:color => :green)
+    puts "  #{@chosen_food.name.upcase}  ".colorize(:color => :green, :background => :light_yellow)
+    puts "  Serving Size           |   #{@chosen_food.serving_size}".colorize(:color => :green)
+    puts "  Calories               |   #{@chosen_food.calories}".colorize(:color => :green)
+    puts "  Total Fat              |   #{@chosen_food.total_fat}".colorize(:color => :green)
+    puts "  Cholesterol            |   #{@chosen_food.cholesterol}".colorize(:color => :green)
+    puts "  Sodium                 |   #{@chosen_food.sodium}".colorize(:color => :green)
+    puts "  Total Carbohydrates    |   #{@chosen_food.total_carbohydrate}".colorize(:color => :green)
+    puts "  Sugar                  |   #{@chosen_food.sugar}".colorize(:color => :green)
+    puts "  Protein                |   #{@chosen_food.protein}".colorize(:color => :green)
     saved_queries_or_main_menu
 end
 
 def saved_queries_or_main_menu
     #After info is printed, options to return to saved searches or main menu.
-    ans = @prompt.select("What would you like to do?", ["Back to saved searches", "Main Menu"])
+    ans = @prompt.select("Please choose one of the following options.", ["Back to saved searches", "Main Menu"])
     if ans == "Back to saved searches"
         saved_queries
     else
@@ -307,3 +307,33 @@ def quit
     MCKK
     exit
 end 
+
+def random_search
+    #Carries out a random search of the database and displays the nurtition info to terminal.
+    @result = Food.all.sample
+    yeet
+    puts "  #{@result.name.upcase}  ".colorize(:color => :green, :background => :light_yellow)
+    puts "  Serving Size           |   #{@result.serving_size}".colorize(:color => :green)
+    puts "  Calories               |   #{@result.calories}".colorize(:color => :green)
+    puts "  Total Fat              |   #{@result.total_fat}".colorize(:color => :green)
+    puts "  Cholesterol            |   #{@result.cholesterol}".colorize(:color => :green)
+    puts "  Sodium                 |   #{@result.sodium}".colorize(:color => :green)
+    puts "  Total Carbohydrates    |   #{@result.total_carbohydrate}".colorize(:color => :green)
+    puts "  Sugar                  |   #{@result.sugar}".colorize(:color => :green)
+    puts "  Protein                |   #{@result.protein}".colorize(:color => :green)
+    rand_search_save_new_main_menu
+end
+    
+def rand_search_save_new_main_menu
+    #Options to save random search, initiate another random search, or return to main menu
+    ans = @prompt.select("Feelin' lucky???", ["Save search", "New random search", "Main menu"])
+    if ans == "Save search"
+        Query.create(food_id: @result.id, user_id: @user_instance.id)
+        @user_instance.foods.reload
+        yeet
+    elsif ans == "New random search"
+        random_search
+    else
+        main_menu
+    end
+end
