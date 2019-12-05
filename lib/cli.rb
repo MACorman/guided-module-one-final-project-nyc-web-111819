@@ -9,6 +9,7 @@ end
 
 def welcome
     yeet
+    pid = fork{ exec 'mpg123', '-q', "audio/Peanut_butter_jelly_time.mp3" } 
     puts "Welcome to the FRESHEST nutrition look-up app *not* on the market!".colorize(:color => :green, :background => :light_yellow)
     puts <<-MCKK
 
@@ -35,6 +36,7 @@ end
 def front_page
     #Existing users log in and new users create an account. 
     ans = @prompt.select("Please choose one of the following options.", ["Log in", "Change password", "Create account", "Quit".colorize(:color => :red)])
+    system("pkill mpg123")
     if ans == "Log in"
         username
         existing_user_password

@@ -16,6 +16,7 @@
 
  To install required gems, please run the following in your terminal:
  bundle install 
+ brew install mpg123
 
  Run db:migrate to import the database schema to your local workstation.
  rake db:migrate
