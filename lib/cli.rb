@@ -3,42 +3,59 @@ require "tty-prompt"
 @prompt = TTY::Prompt.new
 
 def yeet
-    #clears DEPRECATION WARNING to make the app look neater
+    #Clears DEPRECATION WARNING to make the app look neater.
     system 'clear'
 end
 
 def welcome
     yeet
     puts "Welcome to the FRESHEST nutrition look-up app *not* on the market!".colorize(:color => :green, :background => :light_yellow)
+    puts <<-MCKK
+
+    ____                                    ?~~bL
+    z@~ b                                    |  `U,
+   ]@[  |                                   ]'  z@'
+   d@~' `|, .__     _----L___----, __, .  _t'   `@j
+  `@L_,   "-~ `--"~-a,           `C.  ~""O_    ._`@
+   q@~'   ]P       ]@[            `Y=,   `H+z_  `a@
+   `@L  _z@        d@               Ya     `-@b,_a'
+    `-@d@a'       )@[               `VL      `a@@'
+      aa~'   ],  .a@'                qqL  ), ./~
+      @@_  _z~  _d@[                 .V@  .L_d'
+       "~@@@'  ]@@@'        __      )@n@bza@-"
+         `-@zzz@@@L        )@@z     ]@@=%-"
+           "~~@@@@@bz_    _a@@@@z___a@K
+               "~-@@@@@@@@@@@@@@@@@@~"   jrd
+                  `~~~-@~~-@@~~~~~'
+    
+    MCKK
     front_page
 end
 
 def front_page
-    #existing users log in and new users create an account 
-    ans = @prompt.select("Please choose one of the following options.", ["Log in", "Change password", "Create account"])
+    #Existing users log in and new users create an account. 
+    ans = @prompt.select("Please choose one of the following options.", ["Log in", "Change password", "Create account", "Quit".colorize(:color => :red)])
     if ans == "Log in"
         username
         existing_user_password
-    elsif
-        ans == "Change password"
+    elsif ans == "Change password"
         username
         change_password
-    else 
+    elsif ans == "Create account"
         username
         creating_user_password
+    else quit
     end
 end
 
 def username
     @user_input_name = @prompt.ask("Please enter your Username.", required: true)
-    
 end
 
 def existing_user_password
-    #identifies user by their input values. If user does not exist in database based on values entered, returns incorrect log in and directs to front page. Otherwise, logs user in
+    #Identifies existing user by their input values. If user does not exist in database based on values entered, returns 'incorrect log in' and directs to front page. Otherwise, logs user in.
     user_input_pass = @prompt.mask("Please enter your Password.", required: true)
     @user_instance = User.find_by(username: @user_input_name, password: user_input_pass)
-    binding.pry
     if @user_instance == nil
         yeet
         puts "Incorrect log in".colorize(:color => :magenta)
@@ -51,7 +68,7 @@ def existing_user_password
 end
 
 def creating_user_password
-    #new users create password and are directed to main menu
+    #New users create password and are directed to main menu.
     user_input_pass = @prompt.mask("Please enter your Password.", required: true)
     @user_instance = User.create(username: @user_input_name, password: user_input_pass)
     yeet
@@ -59,6 +76,7 @@ def creating_user_password
 end
 
 def change_password
+    #Allows exitsing users to change their password.
     new_password = @prompt.mask("Please enter a new password.", required: true)
     @user_instance = User.find_by(username: @user_input_name)
     @user_instance.update(password: new_password)
@@ -68,25 +86,49 @@ def change_password
 end
 
 def main_menu
-   #@user_instance.reload
     yeet
+    puts <<-MCKK
+                             ___
+                          _/`.-'`.
+                _      _/` .  _.'
+       ..:::::.(_)   /` _.'_./
+     .oooooooooo\ \o/.-'__.'o.
+    .ooooooooo`._\_|_.'`oooooob.
+  .ooooooooooooooooooooo&&oooooob.
+ .oooooooooooooooooooo&@@@@@@oooob.
+.ooooooooooooooooooooooo&&@@@@@ooob.
+doooooooooooooooooooooooooo&@@@@ooob
+doooooooooooooooooooooooooo&@@@oooob
+dooooooooooooooooooooooooo&@@@ooooob
+dooooooooooooooooooooooooo&@@oooooob
+`dooooooooooooooooooooooooo&@ooooob'
+ `doooooooooooooooooooooooooooooob'
+  `doooooooooooooooooooooooooooob'
+   `doooooooooooooooooooooooooob'
+    `doooooooooooooooooooooooob'
+     `doooooooooooooooooooooob'
+jgs   `dooooooooobodoooooooob'
+       `doooooooob dooooooob'
+         `"""""""' `""""""'
+                                                     
+    MCKK
+
     ans = @prompt.select("Please choose one of the following options.", ["Instantiate new search", "View saved searches", "Log out", "Quit".colorize(:color => :red)])
-    if ans == "View saved searches"
+    if ans == "Instantiate new search"
+        new_query
+    elsif ans == "View saved searches"
         @new_array = (@user_instance.foods.map {|data| data.name}).uniq
         yeet
         saved_queries
-    elsif ans == "Instantiate new search"
-        new_query
     elsif ans == "Log out"
         front_page
-    else
-        ans == "Quit"
-        exit
+    else ans == "Quit"
+        quit 
     end  
 end
 
 def new_query
-    #user enters search term. Downcase and singularize so app doesn't break when terms like "APPLE", "Cherry", or "hams" are entered. If food does not exist in database, directs to food_not_found method
+    #User enters search term. Downcase and singularize so app doesn't break when terms like "APPLE", "Cherry", or "hams" are entered. If food does not exist in database, directs to food_not_found method.
     ans = @prompt.select("Please choose one of the following options.", ["Enter the food/beverage you would like to search", "Main Menu"])
     if ans == "Main Menu"
         main_menu
@@ -107,6 +149,7 @@ def new_query
 end 
 
 def food_not_found
+    #Displays apology message. Redirects to begin new search or main menu.
     ans = @prompt.select("Sorry, that is outside our scope. What would you like to do?", ["Start new search", "Main Menu"])
     if ans == "Start new search"
         new_query
@@ -116,6 +159,7 @@ def food_not_found
 end
 
 def print_new_food
+    #Displays nutritional info for chosen food to terminal.
     puts "| Name                   |    #{@food_deets.name.capitalize}".colorize(:color => :green)
     puts "|________________________|________________________".colorize(:color => :green)
     puts "| Serving Size           |    #{@food_deets.serving_size}".colorize(:color => :green)
@@ -130,6 +174,7 @@ def print_new_food
 end
 
 def save_new_search
+    #Saves new searches to user's accout.
     ans = @prompt.select("Please choose one of the following options.", ["Save", "Start new search"])
     if ans == "Start new search"
         new_query
@@ -144,20 +189,21 @@ end
 
 def return_to_main_menu_or_quit
     ans = @prompt.select("Please choose one of the following options.", ["Main Menu", "Quit".colorize(:color => :red)])
-    if ans == "Quit"
-        exit
-    else
+    if ans == "Main Menu"
         main_menu
+    else
+        quit
     end
 end 
 
 def saved_queries
+    #Displays user's saved searches in list as well as options to delete saved searches or return to main menu.
     ans = @prompt.select("Choose from an existing search.", [@new_array, "Delete saved search", "Main Menu"])
-    if ans == "Main Menu"
-        main_menu
-    elsif ans == "Delete saved search"
+    if ans == "Delete saved search"
         delete_saved_search
-    else
+    elsif ans == "Main Menu"
+        main_menu
+    else 
         @chosen_food = Food.find_by(name: ans)
         yeet
         print_saved_food
@@ -165,6 +211,7 @@ def saved_queries
 end
 
 def delete_saved_search
+    #User inputs search they would like to delete and search is then deleted. If user enters food not in their saved search list, returns item not found and gives options to search again or return to main menu.
     user_input = @prompt.ask("Please enter the name of the search you would like to delete.", required: true).downcase.singularize
     if @new_array.any? {|food| food==user_input} == false
         ans = @prompt.select("The item was not found in your saved searches. What would you like to do?", ["Search Again", "Main Menu"])
@@ -183,6 +230,7 @@ def delete_saved_search
 end
 
 def print_saved_food
+    #Displays chosen saved search's nutritional info to terminal.
     puts "| Name                   |   #{@chosen_food.name.capitalize}".colorize(:color => :green)
     puts "|________________________|_________________________".colorize(:color => :green)
     puts "| Serving Size           |   #{@chosen_food.serving_size}".colorize(:color => :green)
@@ -197,6 +245,7 @@ def print_saved_food
 end
 
 def saved_queries_or_main_menu
+    #After info is printed, options to return to saved searches or main menu.
     ans = @prompt.select("What would you like to do?", ["Back to saved searches", "Main Menu"])
     if ans == "Back to saved searches"
         saved_queries
@@ -204,3 +253,57 @@ def saved_queries_or_main_menu
         main_menu
     end
 end
+
+def quit 
+    puts "Thanks for stopping by!".colorize(:color => :green, :background => :light_yellow)
+    puts <<-MCKK
+                       * 
+                                  * 
+     *                                             * 
+                                          * 
+               * 
+                             * 
+                                                       * 
+    * 
+                                             * 
+        * 
+                      *             * 
+                                                * 
+ *                                                               * 
+          * 
+                          (             ) 
+                  )      (*)           (*)      ( 
+         *       (*)      |             |      (*) 
+                  |      |~|           |~|      |          * 
+                 |~|     | |           | |     |~| 
+                 | |     | |           | |     | | 
+                ,| |a@@@@| |@@@@@@@@@@@| |@@@@a| |. 
+           .,a@@@| |@@@@@| |@@@@@@@@@@@| |@@@@@| |@@@@a,. 
+         ,a@@@@@@| |@@@@@@@@@@@@.@@@@@@@@@@@@@@| |@@@@@@@a, 
+        a@@@@@@@@@@@@@@@@@@@@@' . `@@@@@@@@@@@@@@@@@@@@@@@@a 
+        ;`@@@@@@@@@@@@@@@@@@'   .   `@@@@@@@@@@@@@@@@@@@@@'; 
+        ;@@@`@@@@@@@@@@@@@'     .     `@@@@@@@@@@@@@@@@'@@@; 
+        ;@@@;,.aaaaaaaaaa       .       aaaaa,,aaaaaaa,;@@@; 
+        ;;@;;;;@@@@@@@@;@      @.@      ;@@@;;;@@@@@@;;;;@@; 
+        ;;;;;;;@@@@;@@;;@    @@ . @@    ;;@;;;;@@;@@@;;;;;;; 
+        ;;;;;;;;@@;;;;;;;  @@   .   @@  ;;;;;;;;;;;@@;;;;@;; 
+        ;;;;;;;;;;;;;;;;;@@     .     @@;;;;;;;;;;;;;;;;@@a; 
+    ,%%%;;;;;;;;@;;;;;;;;       .       ;;;;;;;;;;;;;;;;@@;;%%%, 
+ .%%%%%%;;;;;;;a@;;;;;;;;     ,%%%,     ;;;;;;;;;;;;;;;;;;;;%%%%%%, 
+.%%%%%%%;;;;;;;@@;;;;;;;;   ,%%%%%%%,   ;;;;;;;;;;;;;;;;;;;;%%%%%%%, 
+%%%%%%%%`;;;;;;;;;;;;;;;;  %%%%%%%%%%%  ;;;;;;;;;;;;;;;;;;;'%%%%%%%% 
+%%%%%%%%%%%%`;;;;;;;;;;;;,%%%%%%%%%%%%%,;;;;;;;;;;;;;;;'%%%%%%%%%%%% 
+`%%%%%%%%%%%%%%%%%,,,,,,,%%%%%%%%%%%%%%%,,,,,,,%%%%%%%%%%%%%%%%%%%%' 
+  `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%' 
+      `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%' 
+             """"""""""""""`,,,,,,,,,'""""""""""""""""" 
+                            `%%%%%%%' 
+                             `%%%%%' 
+                               %%% 
+                              %%%%% 
+                           .,%%%%%%%,. 
+                      ,%%%%%%%%%%%%%%%%%%%, 
+          ---------------------------------------------
+    MCKK
+    exit
+end 
