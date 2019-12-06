@@ -115,12 +115,12 @@ def main_menu
                                                      
     MCKK
 
-    ans = @prompt.select("Please choose one of the following options.", ["Instantiate new search", "Feelin' lucky??", "View saved searches", "Log out", "Quit".colorize(:color => :red)])
+    ans = @prompt.select("Welcome, #{@user_instance.username}! Please choose one of the following options.", ["Instantiate new search", "Feelin' lucky??", "View your saved searches", "Log out", "Quit".colorize(:color => :red)])
     if ans == "Instantiate new search"
         new_query
     elsif ans == "Feelin' lucky??"
         random_search
-    elsif ans == "View saved searches"
+    elsif ans == "View your saved searches"
         @new_array = (@user_instance.foods.map {|data| data.name}).uniq
         yeet
         saved_queries
