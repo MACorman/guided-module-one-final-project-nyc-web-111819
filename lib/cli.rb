@@ -84,7 +84,7 @@ def change_password
     @user_instance.update(password: new_password)
     yeet
     puts "Password updated!".colorize(:color => :cyan)
-    main_menu
+    front_page
 end
 
 def main_menu
