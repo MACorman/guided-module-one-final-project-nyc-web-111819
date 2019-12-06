@@ -9,7 +9,7 @@ end
 
 def welcome
     yeet
-    pid = fork{ exec 'mpg123', '-q', "audio/Peanut_butter_jelly_time.mp3" } 
+    pid = fork{ exec 'mpg123', '-q', "audio/Dr_Jean_The_Guacamole_Song.mp3" } 
     puts "Welcome to the FRESHEST nutrition look-up app *not* on the market!".colorize(:color => :green, :background => :light_yellow)
     puts <<-MCKK
 
